@@ -1,20 +1,8 @@
-# Maven build output
 target/
-
-# IDE settings
 .idea/
 *.iml
-
-# OS junk
 .DS_Store
 Thumbs.db
-
-# Logs
 *.log
-
-# Git
 .git
-.gitignore
-
-# Tests
 test/
