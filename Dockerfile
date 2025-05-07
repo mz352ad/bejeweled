@@ -10,11 +10,11 @@ WORKDIR /app
 COPY --from=build /app/target/Bejeweled-1.0-SNAPSHOT.jar app.jar
 
 # Встановлюємо значення середовища за замовчуванням
-ENV PGHOST=containers-us-west-1.railway.app
+ENV PGHOST=postgres.railway.internal
 ENV PGPORT=5432
 ENV PGDATABASE=railway
 ENV PGUSER=postgres
-ENV PGPASSWORD=1844
+ENV PGPASSWORD=oqYLjlarPnMQMgesBXVVzfcKdgcKVfQv
 ENV PORT=8080
 ENV SPRING_PROFILES_ACTIVE=prod
 
