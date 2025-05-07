@@ -4,8 +4,13 @@ import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 
 import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.Properties;
 
 @Configuration
 public class DatabaseConfig {
@@ -13,32 +18,31 @@ public class DatabaseConfig {
     @Bean
     @Primary
     public DataSource dataSource() {
-        String pgHost = System.getenv("PGHOST");
-        String pgPort = System.getenv("PGPORT");
-        String pgDatabase = System.getenv("PGDATABASE");
-        String pgUser = System.getenv("PGUSER");
-        String pgPassword = System.getenv("PGPASSWORD");
+        String url = "jdbc:postgresql://containers-us-west-1.railway.app:5432/railway";
+        String username = "postgres";
+        String password = "1844";
 
-        System.out.println("PGHOST: " + pgHost);
-        System.out.println("PGPORT: " + pgPort);
-        System.out.println("PGDATABASE: " + pgDatabase);
-        System.out.println("PGUSER: " + pgUser);
+        // Перевіримо з'єднання перед створенням пулу
+        try {
+            System.out.println("Тестуємо з'єднання з базою даних...");
+            Properties props = new Properties();
+            props.setProperty("user", username);
+            props.setProperty("password", password);
+            props.setProperty("connectTimeout", "10");
+            props.setProperty("loginTimeout", "10");
 
-        // Перевірка на null та встановлення значень за замовчуванням
-        if (pgHost == null) pgHost = "containers-us-west-1.railway.app";
-        if (pgPort == null) pgPort = "5432";
-        if (pgDatabase == null) pgDatabase = "railway";
-        if (pgUser == null) pgUser = "postgres";
-        if (pgPassword == null) pgPassword = "1844";
-
-        String url = "jdbc:postgresql://" + pgHost + ":" + pgPort + "/" + pgDatabase;
-        System.out.println("Database URL: " + url);
+            Connection conn = DriverManager.getConnection(url, props);
+            System.out.println("З'єднання успішне!");
+            conn.close();
+        } catch (SQLException e) {
+            System.err.println("Помилка з'єднання з базою даних: " + e.getMessage());
+        }
 
         return DataSourceBuilder
                 .create()
                 .url(url)
-                .username(pgUser)
-                .password(pgPassword)
+                .username(username)
+                .password(password)
                 .driverClassName("org.postgresql.Driver")
                 .build();
     }
