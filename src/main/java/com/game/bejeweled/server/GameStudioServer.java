@@ -24,7 +24,12 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableJpaRepositories("com.game.bejeweled.repository")
 public class GameStudioServer {
     public static void main(String[] args) {
-        // Set a system property to indicate we're running in server mode
+        // Додайте затримку перед запуском, щоб БД встигла запуститися
+        try {
+            Thread.sleep(10000); // Затримка 10 секунд
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         System.setProperty("app.mode", "server");
         SpringApplication.run(GameStudioServer.class, args);
     }
