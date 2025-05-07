@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+</head>
+<body>
+<!-- Mobile Navigation Menu  -->
+<div th:fragment="mobile-nav" class="mobile-nav-menu">
+  <a th:href="${activePage == 'home'} ? '/bejeweled#leaderboard' : '#leaderboard'"
+     class="mobile-nav-item"
+     th:classappend="${activePage == 'leaderboard'} ? 'active' : ''">
+    <i class="fas fa-trophy"></i>
+    <span>Leaderboard</span>
+  </a>
+
+  <a href="/bejeweled"
+     class="mobile-nav-item play-nav-item"
+     th:classappend="${activePage == 'game'} ? 'active' : ''">
+    <i class="fas fa-play"></i>
+    <span>Play</span>
+  </a>
+
+  <a th:href="${activePage == 'home'} ? '/bejeweled#comments' : '#comments'"
+     class="mobile-nav-item"
+     th:classappend="${activePage == 'comments'} ? 'active' : ''">
+    <i class="fas fa-comment"></i>
+    <span>Review's</span>
+  </a>
+</div>
+</body>
+</html>

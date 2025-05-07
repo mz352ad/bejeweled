@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<!-- Header -->
+<header th:fragment="header">
+
+    <div class="logo-nav-container">
+        <div class="logo" id="logo">
+            <span>💎</span> Bejeweled
+        </div>
+
+        <div class="nav-links">
+            <a th:href="${activePage == 'home'} ? '/bejeweled#leaderboard' : '#leaderboard'"
+               th:class="${#strings.contains(#httpServletRequest.requestURI, '#leaderboard')} ? 'active' : ''">Leaderboard</a>
+            <a th:href="${activePage == 'home'} ? '/bejeweled#comments' : '#comments'"
+               th:class="${#strings.contains(#httpServletRequest.requestURI, '#comments')} ? 'active' : ''">Comments</a>
+        </div>
+    </div>
+
+    <div class="auth-buttons">
+        <button class="sign-in-btn">
+            <i class="fas fa-sign-in-alt"></i>
+            <span class="btn-text">Sign in</span>
+        </button>
+        <button class="sign-up-btn">
+            <i class="fas fa-user-plus"></i>
+            <span class="btn-text">Sign up</span>
+        </button>
+    </div>
+</header>
+</body>
+</html>

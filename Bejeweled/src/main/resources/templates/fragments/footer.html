@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+</head>
+<body>
+<!-- Footer  -->
+<footer th:fragment="footer(showDonation)" th:with="showDonationBanners=${showDonation != null ? showDonation : true}">
+  <div class="footer-content">
+    <div class="footer-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+      <a href="#">Contact Us</a>
+      <a href="#">FAQ</a>
+    </div>
+
+    <!-- Donation banners  -->
+    <div class="donation-buttons">
+      <a href="#" class="donation-button">
+        <img src="/css/images/buy-me-coffee.jpg" alt="Support Our Game">
+      </a>
+      <a href="#" class="donation-button">
+        <img src="/css/images/donate-hands.png" alt="Buy Me a Coffee">
+      </a>
+    </div>
+
+    <div class="copyright">
+      &copy; <span id="year">2025</span> Bejeweled. All rights reserved.
+    </div>
+  </div>
+</footer>
+
+<footer th:fragment="simple-footer">
+  <div class="footer-content">
+    <div class="footer-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+      <a href="#">Contact Us</a>
+      <a href="#">FAQ</a>
+    </div>
+
+    <div class="copyright">
+      &copy; <span id="year">2025</span> Bejeweled. All rights reserved.
+    </div>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bejeweled - Match Three Adventure</title>
+  <link rel="icon" href="css/images/wild.png" th:href="@{css/images/wild.png}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Consolidated CSS -->
+  <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+<!-- Header -->
+<header>
+  <div class="logo-nav-container">
+    <div class="logo">
+      <span>💎</span> Bejeweled
+    </div>
+
+    <div class="nav-links">
+      <a href="/leaderboards">Leaderboard</a>
+      <a href="/reviews">Reviews</a>
+    </div>
+  </div>
+
+  <div class="auth-buttons">
+    <button class="sign-in-btn">
+      <i class="fas fa-sign-in-alt"></i>
+      <span class="btn-text">Sign in</span>
+    </button>
+    <button class="sign-up-btn">
+      <i class="fas fa-user-plus"></i>
+      <span class="btn-text">Sign up</span>
+    </button>
+  </div>
+</header>
+
+<!-- Main Content -->
+<main>
+  <div class="hero-section">
+    <div class="hero-image">
+      <img src="/css/images/bejeweled-game.png" alt="Bejeweled Preview" width="500" height="auto" />
+    </div>
+    <div class="hero-content">
+      <div class="tournament-tag">Bejeweled Arena</div>
+      <h1>Swap, Match, Win!</h1>
+      <p class="hero-subtitle">Join the sparkling world of Bejeweled: match colorful gems and break high scores!</p>
+      <div class="hero-buttons">
+        <a href="#" class="create-account-btn">Create an Account</a>
+        <a href="/bejeweled" class="play-guest-btn">Play as Guest</a>
+      </div>
+      <p class="guest-text">Jump in now – no sign-up needed to get started!</p>
+    </div>
+  </div>
+</main>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-content">
+    <div class="footer-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+      <a href="#">Contact Us</a>
+      <a href="#">FAQ</a>
+    </div>
+
+    <div class="donation-buttons">
+      <a href="#" class="donation-button">
+        <img src="/css/images/buy-me-coffee.jpg" alt="Support Our Game">
+      </a>
+      <a href="#" class="donation-button">
+        <img src="/css/images/donate-hands.png" alt="Buy Me a Coffee">
+      </a>
+    </div>
+
+    <div class="copyright">
+      &copy; <span id="year">2025</span> Bejeweled. All rights reserved.
+    </div>
+  </div>
+</footer>
+
+<!-- Mobile navigation menu -->
+<div class="mobile-nav-menu">
+  <a href="/bejeweled#leaderboard" class="mobile-nav-item">
+    <i class="fas fa-trophy"></i>
+    <span></span>
+  </a>
+  <a href="/bejeweled" class="mobile-nav-item play-nav-item">
+    <i class="fas fa-play"></i>
+    <span>Play</span>
+  </a>
+  <a href="/bejeweled#comments" class="mobile-nav-item">
+    <i class="fas fa-comment"></i>
+    <span></span>
+  </a>
+</div>
+
+<!-- Consolidated JS -->
+<script src="/js/auth.js"></script>
+<script src="/js/modals.js"></script>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // animation to Play
+  document.addEventListener('DOMContentLoaded', function() {
+    const playButton = document.querySelector('.play-nav-item');
+    if (playButton && window.matchMedia('(max-width: 767px)').matches) {
+      setTimeout(() => {
+        playButton.classList.add('animate');
+        setTimeout(() => {
+          playButton.classList.remove('animate');
+        }, 3000);
+      }, 1000);
+    }
+  });
+</script>
+</body>
+</html>

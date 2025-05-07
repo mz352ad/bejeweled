@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bejeweled - Leaderboards</title>
+  <link rel="icon" href="css/images/wild.png" th:href="@{css/images/wild.png}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Consolidated CSS -->
+  <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+<!-- Header -->
+<header>
+  <div class="logo-nav-container">
+    <a href="/main-page" style="text-decoration: none; color: inherit;">
+      <div class="logo" id="logo">
+        <span>💎</span> Bejeweled
+      </div>
+    </a>
+
+    <div class="nav-links">
+      <a href="/bejeweled">Play Game</a>
+      <a href="/reviews">Reviews</a>
+    </div>
+  </div>
+
+  <div class="auth-buttons">
+    <button class="sign-in-btn">
+      <i class="fas fa-sign-in-alt"></i>
+      <span class="btn-text">Sign in</span>
+    </button>
+    <button class="sign-up-btn">
+      <i class="fas fa-user-plus"></i>
+      <span class="btn-text">Sign up</span>
+    </button>
+  </div>
+</header>
+
+<main>
+  <h1>Bejeweled Leaderboard</h1>
+
+  <!-- Top Scores -->
+  <h2>🏆 Top Scores</h2>
+  <div class="leaderboard-container">
+    <table class="game-data-table">
+      <thead>
+      <tr>
+        <th>#</th>
+        <th>Player</th>
+        <th>Points</th>
+      </tr>
+      </thead>
+      <tbody id="leaderboard-data">
+      <tr th:each="score, iterStat : ${topScores}">
+        <td th:text="${iterStat.count}"></td>
+        <td th:text="${score.player}"></td>
+        <td th:text="${score.points}"></td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <div style="text-align: center; margin: 30px 0;">
+    <a href="/bejeweled" class="create-account-btn">Play Now</a>
+  </div>
+</main>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-content">
+    <div class="footer-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+      <a href="#">Contact Us</a>
+      <a href="#">FAQ</a>
+    </div>
+
+    <div class="donation-buttons">
+      <a href="#" class="donation-button">
+        <img src="/css/images/buy-me-coffee.jpg" alt="Support Our Game">
+      </a>
+      <a href="#" class="donation-button">
+        <img src="/css/images/donate-hands.png" alt="Buy Me a Coffee">
+      </a>
+    </div>
+
+    <div class="copyright">
+      &copy; <span id="year">2025</span> Bejeweled. All rights reserved.
+    </div>
+  </div>
+</footer>
+
+<!-- Mobile navigation menu -->
+<div class="mobile-nav-menu">
+  <a href="/leaderboards" class="mobile-nav-item">
+    <i class="fas fa-trophy"></i>
+    <span></span>
+  </a>
+  <a href="/bejeweled" class="mobile-nav-item play-nav-item">
+    <i class="fas fa-play"></i>
+    <span>Play</span>
+  </a>
+  <a href="/reviews" class="mobile-nav-item">
+    <i class="fas fa-comment"></i>
+    <span></span>
+  </a>
+</div>
+
+<!-- Scripts -->
+<script src="/js/auth.js"></script>
+<script src="/js/modals.js"></script>
+<script src="/js/utils.js"></script>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // refresh leaderboard data
+  function refreshLeaderboard() {
+    fetch('/api/leaderboard')
+            .then(response => response.json())
+            .then(data => {
+              const leaderboardTableBody = document.getElementById('leaderboard-data');
+              leaderboardTableBody.innerHTML = ''; // Clear current data
+
+              data.forEach((score, index) => {
+                const row = document.createElement('tr');
+
+                const rankCell = document.createElement('td');
+                rankCell.textContent = index + 1;
+
+                const playerCell = document.createElement('td');
+                playerCell.textContent = score.player;
+
+                const pointsCell = document.createElement('td');
+                pointsCell.textContent = score.points;
+
+                row.appendChild(rankCell);
+                row.appendChild(playerCell);
+                row.appendChild(pointsCell);
+
+                leaderboardTableBody.appendChild(row);
+              });
+            })
+            .catch(error => console.error('Error refreshing leaderboard:', error));
+  }
+  setInterval(refreshLeaderboard, 30000);
+</script>
+</body>
+</html>

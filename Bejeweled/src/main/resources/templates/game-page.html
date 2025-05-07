@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bejeweled Web</title>
+    <link rel="icon" href="css/images/wild.png" th:href="@{css/images/wild.png}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Consolidated CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- Alpine.js for mobile UI -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body>
+<!-- Header -->
+<header>
+    <div class="logo-nav-container">
+        <a href="/main-page" style="text-decoration: none; color: inherit;">
+            <div class="logo" id="logo">
+                <span>💎</span> Bejeweled
+            </div>
+        </a>
+
+        <div class="nav-links">
+            <a href="/leaderboards">Leaderboard</a>
+            <a href="/reviews">Reviews</a>
+        </div>
+    </div>
+
+    <div class="auth-buttons">
+        <button class="sign-in-btn">
+            <i class="fas fa-sign-in-alt"></i>
+            <span class="btn-text">Sign in</span>
+        </button>
+        <button class="sign-up-btn">
+            <i class="fas fa-user-plus"></i>
+            <span class="btn-text">Sign up</span>
+        </button>
+    </div>
+</header>
+
+<main>
+    <h1>Bejeweled Web</h1>
+
+    <!-- Game board -->
+    <div>
+        <table class="standard-board">
+            <tbody>
+            <tr th:each="rowIdx : ${#numbers.sequence(0, board.height - 1)}">
+                <td th:each="colIdx : ${#numbers.sequence(0, board.width - 1)}"
+                    th:attr="data-x=${colIdx}, data-y=${rowIdx}"
+                    class="gem-cell"
+                    draggable="true">
+                    <img class="gem-image"
+                         th:src="@{/css/images/__${board.getGem(rowIdx, colIdx)?.type.name().toLowerCase()}__.png}"
+                         alt="Gem" width="48" height="48" draggable="false">
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Container for mob version -->
+    <div id="mobile-game-container"></div>
+
+    <!-- Score -->
+    <div class="score-display">
+        <i class="fas fa-trophy" style="color: var(--yellow);"></i>
+        Score: <strong id="current-score" th:text="${score}">0</strong>
+    </div>
+
+    <!-- Reviews -->
+    <div class="review-section">
+        <h3 th:text="${message}">Add your review please</h3>
+        <form th:action="@{/bejeweled/review}" method="post" class="review-form">
+            <div class="form-group">
+                <div class="rating-input">
+                    <label>Your rating:</label>
+                    <div class="star-rating">
+                        <input type="radio" id="star5" name="rating" value="5" required/>
+                        <label for="star5" title="5 stars">☆</label>
+                        <input type="radio" id="star4" name="rating" value="4"/>
+                        <label for="star4" title="4 stars">☆</label>
+                        <input type="radio" id="star3" name="rating" value="3"/>
+                        <label for="star3" title="3 stars">☆</label>
+                        <input type="radio" id="star2" name="rating" value="2"/>
+                        <label for="star2" title="2 stars">☆</label>
+                        <input type="radio" id="star1" name="rating" value="1"/>
+                        <label for="star1" title="1 star">☆</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <textarea name="comment" placeholder="Your comment" required class="form-control"></textarea>
+                </div>
+            </div>
+            <button type="submit" class="submit-review-btn">Submit Review</button>
+        </form>
+    </div>
+</main>
+
+<!-- Footer -->
+<footer>
+    <div class="footer-content">
+        <div class="footer-links">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+            <a href="#">Contact Us</a>
+            <a href="#">FAQ</a>
+        </div>
+
+        <div class="donation-buttons">
+            <a href="#" class="donation-button">
+                <img src="/css/images/buy-me-coffee.jpg" alt="Support Our Game">
+            </a>
+            <a href="#" class="donation-button">
+                <img src="/css/images/donate-hands.png" alt="Buy Me a Coffee">
+            </a>
+        </div>
+
+        <div class="copyright">
+            &copy; <span id="year">2025</span> Bejeweled. All rights reserved.
+        </div>
+    </div>
+</footer>
+
+<!-- Mobile nav bar -->
+<div class="mobile-nav-menu">
+    <a href="/leaderboards" class="mobile-nav-item">
+        <i class="fas fa-trophy"></i>
+        <span></span>
+    </a>
+    <a href="/bejeweled" class="mobile-nav-item play-nav-item">
+        <i class="fas fa-play"></i>
+        <span>Play</span>
+    </a>
+    <a href="/reviews" class="mobile-nav-item">
+        <i class="fas fa-comment"></i>
+        <span></span>
+    </a>
+</div>
+
+<!-- Styles for rating system -->
+<style>
+
+    .review-form {
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    textarea.form-control {
+        min-height: 100px;
+        padding: 10px;
+    }
+
+    .rating-input {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .star-rating {
+        display: flex;
+        flex-direction: row-reverse;
+        font-size: 1.5em;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .star-rating input {
+        display: none;
+    }
+
+    .star-rating label {
+        color: #ddd;
+        cursor: pointer;
+        font-size: 2em;
+    }
+
+    .star-rating :checked ~ label {
+        color: var(--yellow);
+    }
+
+    .star-rating label:hover,
+    .star-rating label:hover ~ label {
+        color: var(--yellow);
+    }
+
+    .submit-review-btn {
+        background-color: var(--accent-green);
+        color: var(--text-white);
+        border: none;
+        padding: 12px 24px;
+        border-radius: var(--radius-md);
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        width: 100%;
+    }
+
+    .submit-review-btn:hover {
+        background-color: var(--accent-green-hover);
+    }
+
+    .mobile-board-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 0 auto;
+        max-width: 100%;
+        padding: 0 5px;
+    }
+
+    .mobile-game-board {
+        background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-blue-dark) 100%);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        box-shadow: var(--shadow-md), inset 0 0 30px rgba(0, 0, 0, 0.3);
+        padding: 5px;
+        margin: 15px 0;
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 2px;
+    }
+
+    .mobile-gem-cell {
+        aspect-ratio: 1 / 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: rgba(255, 255, 255, 0.1);
+        position: relative;
+        transition: transform 0.2s, background-color 0.2s;
+        border-radius: 4px;
+        overflow: hidden;
+    }
+
+    .mobile-gem-cell:active {
+        transform: scale(0.95);
+    }
+
+    .mobile-selected {
+        background-color: rgba(255, 255, 255, 0.3) !important;
+        transform: scale(1.1);
+        z-index: 10;
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    }
+
+    .mobile-gem-image {
+        width: 92%;
+        height: 92%;
+        object-fit: contain;
+        pointer-events: none;
+        filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
+        transition: transform 0.2s;
+    }
+
+    .mobile-message {
+        background-color: var(--accent-blue);
+        color: var(--text-white);
+        padding: 10px 20px;
+        border-radius: var(--radius-md);
+        margin: 10px;
+        text-align: center;
+        box-shadow: var(--shadow-md);
+        position: absolute;
+        top: 60px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 100;
+        font-weight: bold;
+    }
+
+    .game-over-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+    }
+
+    .game-over-message {
+        background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-blue-dark) 100%);
+        padding: 30px;
+        border-radius: var(--radius-lg);
+        text-align: center;
+        max-width: 90%;
+        width: 400px;
+        box-shadow: var(--shadow-lg);
+    }
+
+    .game-over-message h2 {
+        color: var(--yellow);
+        margin-bottom: 20px;
+    }
+
+    .game-over-message p {
+        margin-bottom: 30px;
+        font-size: 16px;
+        line-height: 1.5;
+    }
+</style>
+
+<!-- Scripts -->
+<script src="/js/auth.js"></script>
+<script src="/js/modals.js"></script>
+<script src="/js/game-updated.js"></script>
+<script src="/js/mobile.js"></script>
+
+<script>
+    //footer date
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // check over if game over
+    document.addEventListener('DOMContentLoaded', function() {
+        function checkGameOver(event) {
+            if (event.detail && !event.detail.hasPossibleMoves) {
+                showGameOver(event.detail.message);
+            }
+        }
+
+        document.addEventListener('game-over', checkGameOver);
+
+        function showGameOver(message) {
+            //game over overlay
+            const overlay = document.createElement('div');
+            overlay.className = 'game-over-overlay';
+            overlay.innerHTML = `
+                <div class="game-over-message">
+                    <h2>Game Over</h2>
+                    <p>${message || 'No more moves available!'}</p>
+                    <button id="restart-game" class="modal-btn modal-btn-primary">Start New Game</button>
+                </div>
+            `;
+
+            document.body.appendChild(overlay);
+
+            // button restart
+            document.getElementById('restart-game').addEventListener('click', function() {
+                fetch('/bejeweled/restart', {
+                    method: 'POST'
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            document.dispatchEvent(new CustomEvent('restart-game', { detail: data }));
+                            document.body.removeChild(overlay);
+                        }
+                    });
+            });
+        }
+    });
+</script>
+</body>
+</html>

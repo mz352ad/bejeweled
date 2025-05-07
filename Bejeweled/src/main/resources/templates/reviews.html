@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bejeweled - Reviews</title>
+  <link rel="icon" href="css/images/wild.png" th:href="@{css/images/wild.png}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Consolidated CSS -->
+  <link rel="stylesheet" href="/css/main.css">
+
+  <style>
+
+    body {
+      background-color: var(--primary-bg);
+      background-image: radial-gradient(circle at 10% 20%, rgba(30, 49, 145, 0.3) 0%, rgba(20, 32, 102, 0.3) 90%);
+      background-attachment: fixed;
+    }
+
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    h1 {
+      font-size: 3rem;
+      text-align: center;
+      margin-bottom: 40px;
+      color: white;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .average-rating {
+      background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-blue-dark) 100%);
+      border-radius: 50px;
+      padding: 15px 30px;
+      margin: 20px auto 50px;
+      text-align: center;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+      border-left: 5px solid var(--yellow);
+      font-size: 1.8rem;
+      max-width: 400px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.3s;
+    }
+
+    .average-rating:hover {
+      transform: translateY(-5px);
+    }
+
+    .average-rating .star {
+      color: var(--yellow);
+      font-size: 28px;
+      margin-right: 15px;
+    }
+
+    .reviews-container {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 40px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .review-item {
+      background: linear-gradient(145deg, var(--accent-blue) 0%, var(--accent-blue-dark) 100%);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      border-left: 5px solid var(--accent-green);
+    }
+
+    .review-item:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .review-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      padding-bottom: 20px;
+    }
+
+    .review-author {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--accent-green);
+      text-transform: capitalize;
+    }
+
+    .rating-stars {
+      font-size: 22px;
+      color: var(--yellow);
+    }
+
+    .review-content {
+      font-size: 18px;
+      font-style: italic;
+      color: white;
+      line-height: 1.6;
+      margin-bottom: 20px;
+      min-height: 80px;
+    }
+
+    .review-date {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.7);
+      text-align: right;
+      font-weight: 500;
+    }
+
+    .write-review-btn {
+      background: linear-gradient(to right, var(--accent-green), var(--accent-green-hover));
+      color: white;
+      border: none;
+      border-radius: 50px;
+      padding: 18px 40px;
+      font-size: 18px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      margin: 50px auto 20px;
+      box-shadow: 0 10px 20px rgba(30, 215, 96, 0.3);
+    }
+
+    .write-review-btn:hover {
+      transform: translateY(-7px);
+      box-shadow: 0 15px 30px rgba(30, 215, 96, 0.4);
+    }
+
+    .write-review-btn i {
+      font-size: 20px;
+    }
+
+    .button-container {
+      text-align: center;
+      margin-top: 60px;
+    }
+
+    @media (max-width: 768px) {
+      .review-item {
+        padding: 20px;
+      }
+
+      .review-author {
+        font-size: 18px;
+      }
+
+      .rating-stars {
+        font-size: 18px;
+      }
+
+      .review-content {
+        font-size: 16px;
+        min-height: 60px;
+      }
+
+      .average-rating {
+        font-size: 1.4rem;
+        padding: 12px 25px;
+      }
+
+      .average-rating .star {
+        font-size: 22px;
+      }
+
+      .write-review-btn {
+        padding: 15px 30px;
+        font-size: 16px;
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .review-item:nth-child(1) {
+      animation: fadeIn 0.5s ease-out 0.1s both;
+    }
+
+    .review-item:nth-child(2) {
+      animation: fadeIn 0.5s ease-out 0.3s both;
+    }
+
+    .review-item:nth-child(3) {
+      animation: fadeIn 0.5s ease-out 0.5s both;
+    }
+  </style>
+</head>
+<body>
+<!-- Header -->
+<header>
+  <div class="logo-nav-container">
+    <a href="/main-page" style="text-decoration: none; color: inherit;">
+      <div class="logo" id="logo">
+        <span>💎</span> Bejeweled
+      </div>
+    </a>
+
+    <div class="nav-links">
+      <a href="/bejeweled">Play Game</a>
+      <a href="/leaderboards">Leaderboards</a>
+    </div>
+  </div>
+
+  <div class="auth-buttons">
+    <button class="sign-in-btn">
+      <i class="fas fa-sign-in-alt"></i>
+      <span class="btn-text">Sign in</span>
+    </button>
+    <button class="sign-up-btn">
+      <i class="fas fa-user-plus"></i>
+      <span class="btn-text">Sign up</span>
+    </button>
+  </div>
+</header>
+
+<main>
+  <h1>Bejeweled Reviews</h1>
+
+  <!-- Review List -->
+  <div class="reviews-container" id="reviews-container">
+    <div th:each="comment : ${comments}" class="review-item">
+      <div class="review-header">
+        <div class="review-author" th:text="${comment.player}">Player Name</div>
+        <div class="rating-stars">
+          <span th:attr="data-player=${comment.player}" class="user-rating"></span>
+        </div>
+      </div>
+      <div class="review-content" th:text="${comment.comment}">
+        Review content goes here...
+      </div>
+      <div class="review-date" th:text="${#temporals.format(comment.commentedOn, 'dd MMMM yyyy р.  HH:mm')}">
+        01 may 2025 р.  12:11
+      </div>
+    </div>
+  </div>
+
+  <div class="button-container">
+    <a href="/bejeweled" class="write-review-btn">
+      <i class="fas fa-pen"></i> Write a Review
+    </a>
+  </div>
+</main>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-content">
+    <div class="footer-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+      <a href="#">Contact Us</a>
+      <a href="#">FAQ</a>
+    </div>
+
+    <div class="donation-buttons">
+      <a href="#" class="donation-button">
+        <img src="/css/images/buy-me-coffee.jpg" alt="Support Our Game">
+      </a>
+      <a href="#" class="donation-button">
+        <img src="/css/images/donate-hands.png" alt="Buy Me a Coffee">
+      </a>
+    </div>
+
+    <div class="copyright">
+      &copy; <span id="year">2025</span> Bejeweled. All rights reserved.
+    </div>
+  </div>
+</footer>
+
+<!-- Mobile navigation menu -->
+<div class="mobile-nav-menu">
+  <a href="/leaderboards" class="mobile-nav-item">
+    <i class="fas fa-trophy"></i>
+    <span></span>
+  </a>
+  <a href="/bejeweled" class="mobile-nav-item play-nav-item">
+    <i class="fas fa-play"></i>
+    <span>Play</span>
+  </a>
+  <a href="/reviews" class="mobile-nav-item">
+    <i class="fas fa-comment"></i>
+    <span></span>
+  </a>
+</div>
+
+<!-- Scripts -->
+<script src="/js/auth.js"></script>
+<script src="/js/modals.js"></script>
+<script src="/js/utils.js"></script>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  async function fetchUserRatings() {
+    try {
+      const response = await fetch('/api/ratings');
+      const ratings = await response.json();
+
+      // Create a map of player names to ratings
+      const ratingMap = {};
+      ratings.forEach(rating => {
+        ratingMap[rating.player] = rating.rating;
+      });
+
+      // Update all user rating elements
+      document.querySelectorAll('.user-rating').forEach(element => {
+        const player = element.getAttribute('data-player');
+        const rating = ratingMap[player] || 0;
+
+        // Create star display
+        let stars = '';
+        for (let i = 1; i <= 5; i++) {
+          if (i <= rating) {
+            stars += '<i class="fas fa-star"></i>'; // Filled star
+          } else {
+            stars += '<i class="far fa-star"></i>'; // Empty star
+          }
+        }
+
+        element.innerHTML = stars;
+      });
+    } catch (error) {
+      console.error('Error fetching ratings:', error);
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    fetchUserRatings();
+    // Додаємо негайне оновлення відгуків при завантаженні
+    refreshReviews();
+  });
+
+  function refreshReviews() {
+    fetch('/api/reviews')
+            .then(response => response.json())
+            .then(data => {
+              // Сортуємо за датою (від найновіших до найстаріших)
+              data.sort((a, b) => {
+                const dateA = new Date(a.commentedOn);
+                const dateB = new Date(b.commentedOn);
+                return dateB - dateA;
+              });
+
+              const reviewsContainer = document.getElementById('reviews-container');
+              reviewsContainer.innerHTML = '';
+
+              data.forEach(review => {
+                const reviewItem = document.createElement('div');
+                reviewItem.className = 'review-item';
+
+                // Використовуємо правильні поля
+                const reviewHeader = document.createElement('div');
+                reviewHeader.className = 'review-header';
+
+                // Ім'я автора - поле player
+                const reviewAuthor = document.createElement('div');
+                reviewAuthor.className = 'review-author';
+                reviewAuthor.textContent = review.player;
+
+                // Зірочки рейтингу - шукаємо за полем player
+                const ratingStars = document.createElement('div');
+                ratingStars.className = 'rating-stars';
+                ratingStars.innerHTML = `<span data-player="${review.player}" class="user-rating"></span>`;
+
+                reviewHeader.appendChild(reviewAuthor);
+                reviewHeader.appendChild(ratingStars);
+
+                const reviewContent = document.createElement('div');
+                reviewContent.className = 'review-content';
+                reviewContent.textContent = review.comment;
+
+                const reviewDate = document.createElement('div');
+                reviewDate.className = 'review-date';
+
+                // Форматування дати
+                let dateText = review.commentedOn;
+                try {
+                  const commentDate = new Date(review.commentedOn);
+                  if (!isNaN(commentDate.getTime())) {
+                    dateText = new Intl.DateTimeFormat('uk-UA', {
+                      day: '2-digit',
+                      month: 'long',
+                      year: 'numeric',
+                      hour: '2-digit',
+                      minute: '2-digit'
+                    }).format(commentDate);
+                  }
+                } catch (e) {
+                  console.error('Помилка форматування дати:', e);
+                }
+
+                reviewDate.textContent = dateText;
+
+                reviewItem.appendChild(reviewHeader);
+                reviewItem.appendChild(reviewContent);
+                reviewItem.appendChild(reviewDate);
+
+                reviewsContainer.appendChild(reviewItem);
+              });
+
+              // Оновлюємо рейтинги
+              fetchUserRatings();
+            })
+            .catch(error => console.error('Error refreshing reviews:', error));
+  }
+
+  setInterval(refreshReviews, 30000);
+</script>
+</body>
+</html>
