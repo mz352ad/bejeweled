@@ -14,4 +14,7 @@ ENV SPRING_DATASOURCE_PASSWORD=oqYLjlarPnWOMgesBXVVzfcKdgcKVfQv
 ENV SPRING_PROFILES_ACTIVE=prod
 ENV PORT=8080
 
-ENTRYPOINT ["java", "-Dspring.profiles.active=prod", "-jar", "app.jar"]
+# Оптимізації для зменшення використання пам'яті
+ENV JAVA_OPTS="-Xmx200m -Xms128m -XX:+UseSerialGC -XX:MaxRAM=256m -Djava.security.egd=file:/dev/./urandom -Dfile.encoding=UTF-8"
+
+ENTRYPOINT exec java $JAVA_OPTS -Dspring.profiles.active=prod -jar app.jar
