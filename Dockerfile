@@ -8,26 +8,13 @@ WORKDIR /app
 COPY --from=build /app/target/Bejeweled-1.0-SNAPSHOT.jar app.jar
 
 # Встановлюємо значення середовища за замовчуванням
-ENV PGHOST=postgres.railway.internal
-ENV PGPORT=5432
+ENV PGHOST=hopper.proxy.rlwy.net
+ENV PGPORT=55758
 ENV PGDATABASE=railway
 ENV PGUSER=postgres
 ENV PGPASSWORD=oqYLjlarPnMQMgesBXVVzfcKdgcKVfQv
 ENV PORT=8080
 ENV SPRING_PROFILES_ACTIVE=prod
-
-# Додаткові налаштування для Hikari і Hibernate
-ENV SPRING_DATASOURCE_HIKARI_CONNECTION_TIMEOUT=240000
-ENV SPRING_DATASOURCE_HIKARI_MAXIMUM_POOL_SIZE=1
-ENV SPRING_DATASOURCE_HIKARI_MINIMUM_IDLE=1
-ENV SPRING_DATASOURCE_HIKARI_INITIALIZATION_FAIL_TIMEOUT=0
-
-# Виводимо значення для дебагу при побудові
-RUN echo "PGHOST: $PGHOST"
-RUN echo "PGPORT: $PGPORT"
-RUN echo "PGDATABASE: $PGDATABASE"
-RUN echo "PGUSER: $PGUSER"
-RUN echo "PORT: $PORT"
-RUN echo "SPRING_PROFILES_ACTIVE: $SPRING_PROFILES_ACTIVE"
+ENV SPRING_DATASOURCE_URL=jdbc:postgresql://hopper.proxy.rlwy.net:55758/railway
 
 ENTRYPOINT ["java", "-Dspring.profiles.active=prod", "-jar", "app.jar"]
