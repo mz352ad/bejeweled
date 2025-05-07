@@ -24,12 +24,30 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableJpaRepositories("com.game.bejeweled.repository")
 public class GameStudioServer {
     public static void main(String[] args) {
-        // Додайте затримку перед запуском, щоб БД встигла запуститися
-        try {
-            Thread.sleep(10000); // Затримка 10 секунд
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        // Виведемо змінні середовища для діагностики
+        System.out.println("PGHOST: " + System.getenv("PGHOST"));
+        System.out.println("PGPORT: " + System.getenv("PGPORT"));
+        System.out.println("PGDATABASE: " + System.getenv("PGDATABASE"));
+        System.out.println("PGUSER: " + System.getenv("PGUSER"));
+
+        // Задаємо явні системні властивості, якщо змінні середовища існують
+        if (System.getenv("PGHOST") != null) {
+            System.setProperty("PGHOST", System.getenv("PGHOST"));
         }
+        if (System.getenv("PGPORT") != null) {
+            System.setProperty("PGPORT", System.getenv("PGPORT"));
+        }
+        if (System.getenv("PGDATABASE") != null) {
+            System.setProperty("PGDATABASE", System.getenv("PGDATABASE"));
+        }
+        if (System.getenv("PGUSER") != null) {
+            System.setProperty("PGUSER", System.getenv("PGUSER"));
+        }
+        if (System.getenv("PGPASSWORD") != null) {
+            System.setProperty("PGPASSWORD", System.getenv("PGPASSWORD"));
+        }
+
+        // Встановіть режим сервера
         System.setProperty("app.mode", "server");
         SpringApplication.run(GameStudioServer.class, args);
     }
