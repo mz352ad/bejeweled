@@ -1,1 +1,1 @@
-web: java -Djava.security.egd=file:/dev/./urandom -jar target/Bejeweled-1.0-SNAPSHOT.jar
+web: java -jar $PATH_TO_JAR
